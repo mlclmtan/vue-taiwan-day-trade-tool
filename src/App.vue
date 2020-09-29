@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="flex flex-col items-center h-screen justify-center">
     <h3>
       股票代號：<input
         v-on:keyup.enter="lastpricefunction"
@@ -39,18 +39,18 @@ export default {
   name: 'main',
   data() {
     return {
-      stockno: '1713',
+      stockno: "1713",
       buys: [
         { id: 0, b: 17.7, v: 5000 },
-        { id: 0, b: '', v: '' },
-        { id: 0, b: '', v: '' },
-        { id: 0, b: '', v: '' },
-        { id: 0, b: '', v: '' },
+        { id: 0, b: "", v: "" },
+        { id: 0, b: "", v: "" },
+        { id: 0, b: "", v: "" },
+        { id: 0, b: "", v: "" }
       ],
-      lprice: '',
-      targetp: '',
+      lprice: "",
+      targetp: "",
       feediscount: 0.3,
-      cname: '',
+      cname: ""
     };
   },
   computed: {
@@ -71,22 +71,28 @@ export default {
     totalbuyfee() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        const fee = buy.b * buy.v * 0.001425 * this.feediscount <= 20
-          ? 20
-          : buy.b * buy.v * 0.001425 * this.feediscount;
-        tot += fee;
-        console.log(fee);
+        if (buy.v != "" || buy.b != "") {
+          const fee =
+            buy.b * buy.v * 0.001425 * this.feediscount <= 20
+              ? 20
+              : buy.b * buy.v * 0.001425 * this.feediscount;
+          tot += fee;
+        }
       });
       return tot;
     },
     totalsellfee() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        const fee = this.targetp * buy.v * 0.001425 * this.feediscount <= 20
-          ? 20
-          : this.targetp * buy.v * 0.001425 * this.feediscount;
-        tot += fee;
+        if (buy.v != "" || buy.b != "") {
+          const fee =
+            this.targetp * buy.v * 0.001425 * this.feediscount <= 20
+              ? 20
+              : this.targetp * buy.v * 0.001425 * this.feediscount;
+          tot += fee;
+        }
       });
+
       return tot;
     },
     tax() {
@@ -98,28 +104,28 @@ export default {
       return tot;
     },
     income() {
-      return this.totalpaid - this.targetp * this.totalV;
+      return (this.totalpaid - this.targetp * this.totalV) * -1;
     },
     allfees() {
       return this.totalbuyfee + this.totalsellfee + this.tax;
     },
     nett() {
       return this.income - this.allfees;
-    },
+    }
   },
   mounted() {
     this.lastpricefunction();
   },
   methods: {
-    lastpricefunction() {
-      const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+    lastpricefunction(url2) {
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
       const url = `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=otc_${this.stockno}.tw&json=1&delay=0`;
       fetch(proxyurl + url)
         .then((response) => response.text())
         .then((contents) => {
           if (JSON.parse(contents).msgArray.length === 0) {
             this.other(
-              `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_${this.stockno}.tw&json=1&delay=0`,
+              `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_${this.stockno}.tw&json=1&delay=0`
             );
           }
           this.lprice = JSON.parse(contents).msgArray[0].z;
@@ -131,7 +137,7 @@ export default {
       // );
     },
     other(url) {
-      const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
       fetch(proxyurl + url)
         .then((response) => response.text())
         .then((contents) => {
@@ -145,8 +151,8 @@ export default {
       // .catch(() =>
       //   console.log("Can’t access " + url + " response. Blocked by browser1?")
       // );
-    },
-  },
+    }
+  }
 };
 </script>
 
