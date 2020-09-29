@@ -132,9 +132,6 @@ export default {
           this.targetp = this.lprice;
           this.cname = JSON.parse(contents).msgArray[0].n;
         });
-      // .catch(() =>
-      //   console.log("Can’t access " + url + " response. Blocked by browser1?")
-      // );
     },
     other(url) {
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
