@@ -148,6 +148,8 @@ export default {
       // .catch(() =>
       //   console.log("Can’t access " + url + " response. Blocked by browser1?")
       // );
+
+      // "error 404 d0527705"
     }
   }
 };
