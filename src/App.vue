@@ -52,7 +52,7 @@
           <br />
           <h2>最後收盤: {{ lprice }}</h2>
           <h2>每升一格多少元: {{ tick }}</h2>
-          <h2>成本價: {{ avg.toFixed(2) }}</h2>
+          <h2>成本價: {{ avg === 0 ? 0 : avg.toFixed(2) }}</h2>
         </div>
       </div>
     </div>
@@ -157,9 +157,13 @@ export default {
       return array;
     },
     avg() {
-      const avg = (this.totalpaid + this.totalBuyFee) / this.totalV;
-      const newAvg = avg % this.tick === 0 ? avg : avg + this.tick - (avg % this.tick);
-      return newAvg;
+      if (this.totalpaid !== 0) {
+        const avg = (this.totalpaid + this.totalBuyFee) / this.totalV;
+        const newAvg = avg % this.tick === 0 ? avg : avg + this.tick - (avg % this.tick);
+        return newAvg;
+      }
+      return 0;
+      //  ? null : newAvg.toFixed(2);
     },
     computedPrice() {
       return typeof this.lprice === 'undefined' ? this.avg : this.lprice;
