@@ -3,8 +3,8 @@
     <h1 class="my-10">當沖好幫手</h1>
     <div class="flex justify-center">
 
-      <div class="flex flex-col h-screen mx-4">
-        <table class="text-xl bg-gray-200">
+      <div class="flex flex-col h-screen mx-4 text-center" id="priceRange">
+        <table class="text-xl bg-gray-200 border-2">
           <tr>
             <th>成交價</th>
             <th>損益</th>
@@ -216,6 +216,13 @@ body {
 th,
 td {
   width: 10vw;
+}
+#priceRange th {
+  @apply py-1;
+}
+#priceRange td,th {
+  width: 10vw;
+  @apply px-3 border;
 }
 
 input {
