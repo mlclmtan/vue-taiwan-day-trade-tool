@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="flex flex-col items-center">
+  <div class="flex flex-col items-center">
     <h1 class="my-10">當沖好幫手</h1>
     <div class="flex justify-center">
 
@@ -10,8 +10,8 @@
             <th>損益</th>
           </tr>
           <tr v-for="p in pRange" :key="p.id" :class="p.price==avg ? 'bg-red-200' : 'bg-blue-100'">
-            <td>{{p.price}}</td>
-            <td>{{Math.round(p.nett)}}</td>
+            <td>{{totalpaid === 0 ? '-' : p.price}}</td>
+            <td>{{totalpaid === 0 ? '-' : Math.round(p.nett)}}</td>
           </tr>
         </table>
       </div>
@@ -42,17 +42,17 @@
           <h2>買入: {{ totalpaid }}</h2>
           <h2>現在賣: {{ targetp * totalV }}</h2>
           <br />
-          <h2>買手續費： {{ Math.round(totalBuyFee) }}</h2>
-          <h2>賣手續費： {{ Math.round(totalSellFee) }}</h2>
-          <h2>稅0.003/2： {{ Math.round(tax) }}</h2>
+          <h2>買手續費： {{ totalpaid === 0 ? '' : Math.round(totalBuyFee) }}</h2>
+          <h2>賣手續費： {{ totalpaid === 0 ? '' : Math.round(totalSellFee) }}</h2>
+          <h2>稅0.003/2： {{ totalpaid === 0 ? '' : Math.round(tax) }}</h2>
           <br />
-          <h2>原收入： {{ income }}</h2>
-          <h2>稅+手續費： {{ Math.round(allfees) }}</h2>
+          <h2>原收入： {{ totalpaid === 0 ? '' : income }}</h2>
+          <h2>稅+手續費： {{ totalpaid === 0 ? '' : Math.round(allfees) }}</h2>
           <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
           <br />
           <h2>最後收盤: {{ lprice }}</h2>
-          <h2>每升一格多少元: {{ tick }}</h2>
-          <h2>成本價: {{ avg === 0 ? 0 : avg.toFixed(2) }}</h2>
+          <h2>每升一格多少元: {{ totalpaid === 0 ? '' : tick }}</h2>
+          <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
         </div>
       </div>
     </div>
