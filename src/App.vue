@@ -23,8 +23,8 @@
             v-model="stockno"
           />{{ cname }}
         </h2>
-        <h2>目標價：<input v-model="targetp" /></h2>
-        <h2>手續費折扣：<input v-model="feediscount" /></h2>
+        <h2>目標價：<input v-model.number="targetp" /></h2>
+        <h2>手續費折扣：<input v-model.number="feediscount" /></h2>
 
         <table class="text-xl">
           <tr>
@@ -32,8 +32,8 @@
             <th>張數</th>
           </tr>
           <tr v-for="buy in buys" :key="buy.id">
-            <td><input v-model="buy.b" /></td>
-            <td><input v-model="buy.v" /></td>
+            <td><input v-model.number="buy.b" /></td>
+            <td><input v-model.number="buy.v" /></td>
           </tr>
         </table>
       </div>
@@ -71,7 +71,7 @@ export default {
         { b: 12, v: 1000 },
         { b: 8.5, v: 1000 },
       ],
-      lprice: '',
+      lprice: null,
       targetp: 10,
       feediscount: 0.3,
       cname: '',
@@ -146,7 +146,7 @@ export default {
     pRange() {
       const array = [];
       let price = parseFloat(this.targetp) + (10 * this.tick);
-      for (let index = 0; index < 21; index += 1) {
+      for (let index = 0; index < 19; index += 1) {
         array.push({ price: `${price.toFixed(2)}`, nett: `${price * this.totalV - this.totalpaid - this.totalBuyFee - this.calculateFee(price) - this.tax}` });
         price -= this.tick;
       }
