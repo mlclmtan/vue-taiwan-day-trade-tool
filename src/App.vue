@@ -9,7 +9,7 @@
             <th>成交價</th>
             <th>損益</th>
           </tr>
-          <tr v-for="p in pRange" :key="p.id">
+          <tr v-for="p in pRange" :key="p.id" :class="p.price==9.85 ? 'bg-red-200' : 'bg-blue-100'">
             <td>{{p.price}}</td>
             <td>{{Math.round(p.nett)}}</td>
           </tr>
@@ -52,7 +52,7 @@
           <br />
           <h2>最後收盤: {{ lprice }}</h2>
           <h2>每升一格多少元: {{ tick }}</h2>
-          <h2>成本價: {{ Math.round(avg) }}</h2>
+          <h2>成本價: {{ avg.toFixed(2) }}</h2>
         </div>
       </div>
     </div>
@@ -153,7 +153,9 @@ export default {
       return array;
     },
     avg() {
-      return (this.totalpaid + this.totalBuyFee) / this.totalV;
+      const avg = (this.totalpaid + this.totalBuyFee) / this.totalV;
+      const newAvg = avg % this.tick === 0 ? avg : avg + this.tick - (avg % this.tick);
+      return newAvg;
     },
     testSellFee() {
       return this.calculateFee(10);
