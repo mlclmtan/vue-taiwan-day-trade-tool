@@ -42,17 +42,17 @@
           <h2>買入: {{ totalpaid }}</h2>
           <h2>現在賣: {{ targetp * totalV }}</h2>
           <br />
-          <h2>買手續費： {{ totalBuyFee }}</h2>
-          <h2>賣手續費： {{ totalSellFee }}</h2>
-          <h2>稅0.003/2： {{ tax }}</h2>
+          <h2>買手續費： {{ Math.round(totalBuyFee) }}</h2>
+          <h2>賣手續費： {{ Math.round(totalSellFee) }}</h2>
+          <h2>稅0.003/2： {{ Math.round(tax) }}</h2>
           <br />
           <h2>原收入： {{ income }}</h2>
-          <h2>稅+手續費： {{ allfees }}</h2>
-          <h2 class="bg-red-600">總收入： {{ nett }}</h2>
+          <h2>稅+手續費： {{ Math.round(allfees) }}</h2>
+          <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
           <br />
           <h2>最後收盤: {{ lprice }}</h2>
           <h2>每升一格多少元: {{ tick }}</h2>
-          <h2>成本價: {{ avg }}</h2>
+          <h2>成本價: {{ Math.round(avg) }}</h2>
         </div>
       </div>
     </div>
