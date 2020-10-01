@@ -6,12 +6,12 @@
       <div class="flex flex-col h-screen mx-4">
         <table class="text-xl bg-gray-200">
           <tr>
-            <th>買價</th>
+            <th>成交價</th>
             <th>損益</th>
           </tr>
-          <tr v-for="p in prange" :key="p.id">
-            <td>{{p}}</td>
-            <td></td>
+          <tr v-for="p in pRange" :key="p.id">
+            <td>{{p.price}}</td>
+            <td>{{Math.round(p.nett)}}</td>
           </tr>
         </table>
       </div>
@@ -19,7 +19,7 @@
       <div class="flex flex-col items-center h-screen mx-4">
         <h2>
           股票代號：<input
-            v-on:keyup.enter="lastpricefunction"
+            v-on:keyup.enter="lastPriceFunction"
             v-model="stockno"
           />{{ cname }}
         </h2>
@@ -42,8 +42,8 @@
           <h2>買入: {{ totalpaid }}</h2>
           <h2>現在賣: {{ targetp * totalV }}</h2>
           <br />
-          <h2>買手續費： {{ totalbuyfee }}</h2>
-          <h2>賣手續費： {{ totalsellfee }}</h2>
+          <h2>買手續費： {{ totalBuyFee }}</h2>
+          <h2>賣手續費： {{ totalSellFee }}</h2>
           <h2>稅0.003/2： {{ tax }}</h2>
           <br />
           <h2>原收入： {{ income }}</h2>
@@ -65,11 +65,11 @@ export default {
     return {
       stockno: '',
       buys: [
-        { id: 0, b: 10, v: 1000 },
-        { id: 0, b: 9, v: 1000 },
-        { id: 0, b: 8, v: 1000 },
-        { id: 0, b: 12, v: 1000 },
-        { id: 0, b: 8.5, v: 1000 },
+        { b: 10, v: 1000 },
+        { b: 9, v: 1000 },
+        { b: 8, v: 1000 },
+        { b: 12, v: 1000 },
+        { b: 8.5, v: 1000 },
       ],
       lprice: '',
       targetp: 10,
@@ -92,7 +92,7 @@ export default {
       });
       return tot;
     },
-    totalbuyfee() {
+    totalBuyFee() {
       let tot = 0;
       this.buys.forEach((buy) => {
         if (buy.v !== '' || buy.b !== '') {
@@ -104,7 +104,7 @@ export default {
       });
       return tot;
     },
-    totalsellfee() {
+    totalSellFee() {
       let tot = 0;
       this.buys.forEach((buy) => {
         if (buy.v !== '' || buy.b !== '') {
@@ -129,7 +129,7 @@ export default {
       return (this.totalpaid - this.targetp * this.totalV) * -1;
     },
     allfees() {
-      return this.totalbuyfee + this.totalsellfee + this.tax;
+      return this.totalBuyFee + this.totalSellFee + this.tax;
     },
     nett() {
       return this.income - this.allfees;
@@ -143,24 +143,27 @@ export default {
         return 1;
       } return 5;
     },
-    prange() {
+    pRange() {
       const array = [];
-      let price = parseFloat(this.targetp) + 5;
-      for (let index = 0; index < 11; index += 1) {
-        array.push(price);
-        price -= 1;
+      let price = parseFloat(this.targetp) + (10 * this.tick);
+      for (let index = 0; index < 21; index += 1) {
+        array.push({ price: `${price.toFixed(2)}`, nett: `${price * this.totalV - this.totalpaid - this.totalBuyFee - this.calculateFee(price) - this.tax}` });
+        price -= this.tick;
       }
       return array;
     },
     avg() {
-      return (this.totalpaid + this.totalbuyfee) / this.totalV;
+      return (this.totalpaid + this.totalBuyFee) / this.totalV;
+    },
+    testSellFee() {
+      return this.calculateFee(10);
     },
   },
   mounted() {
-    this.lastpricefunction();
+    this.lastPriceFunction();
   },
   methods: {
-    lastpricefunction() {
+    lastPriceFunction() {
       const proxyurl = 'https://cors-anywhere.herokuapp.com/';
       const url = `https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=otc_${this.stockno}.tw&json=1&delay=0`;
       fetch(proxyurl + url)
@@ -192,15 +195,19 @@ export default {
       //   console.log("Can’t access " + url + " response. Blocked by browser1?")
       // );
     },
+    calculateFee(sellPrice) {
+      const fee = sellPrice * this.totalV * 0.001425 * this.feediscount <= 20
+        ? 20
+        : sellPrice * this.totalV * 0.001425 * this.feediscount;
+      return fee;
+    },
   },
 };
 </script>
 
 <style lang="scss">
 @tailwind base;
-
 @tailwind components;
-
 @tailwind utilities;
 
 body {
@@ -213,6 +220,7 @@ td {
 
 input {
   background-color: lightgreen;
+  width: 10vw;
 }
 
 h1 {
