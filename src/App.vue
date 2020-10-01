@@ -9,7 +9,7 @@
             <th>成交價</th>
             <th>損益</th>
           </tr>
-          <tr v-for="p in pRange" :key="p.id" :class="p.price==9.85 ? 'bg-red-200' : 'bg-blue-100'">
+          <tr v-for="p in pRange" :key="p.id" :class="p.price==avg ? 'bg-red-200' : 'bg-blue-100'">
             <td>{{p.price}}</td>
             <td>{{Math.round(p.nett)}}</td>
           </tr>
@@ -65,14 +65,18 @@ export default {
     return {
       stockno: '',
       buys: [
-        { b: 10, v: 1000 },
-        { b: 9, v: 1000 },
-        { b: 8, v: 1000 },
-        { b: 12, v: 1000 },
-        { b: 8.5, v: 1000 },
+        { b: null, v: null },
+        { b: null, v: null },
+        { b: null, v: null },
+        { b: null, v: null },
+        // { b: 10, v: 1000 },
+        // { b: 9, v: 1000 },
+        // { b: 8, v: 1000 },
+        // { b: 12, v: 1000 },
+        // { b: 8.5, v: 1000 },
       ],
       lprice: null,
-      targetp: 10,
+      targetp: null,
       feediscount: 0.3,
       cname: '',
     };
@@ -95,7 +99,7 @@ export default {
     totalBuyFee() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        if (buy.v !== '' || buy.b !== '') {
+        if (buy.v !== null || buy.b !== null) {
           const fee = buy.b * buy.v * 0.001425 * this.feediscount <= 20
             ? 20
             : buy.b * buy.v * 0.001425 * this.feediscount;
@@ -107,7 +111,7 @@ export default {
     totalSellFee() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        if (buy.v !== '' || buy.b !== '') {
+        if (buy.v !== null || buy.b !== null) {
           const fee = this.targetp * buy.v * 0.001425 * this.feediscount <= 20
             ? 20
             : this.targetp * buy.v * 0.001425 * this.feediscount;
@@ -157,12 +161,13 @@ export default {
       const newAvg = avg % this.tick === 0 ? avg : avg + this.tick - (avg % this.tick);
       return newAvg;
     },
-    testSellFee() {
-      return this.calculateFee(10);
+    computedPrice() {
+      return typeof this.lprice === 'undefined' ? this.avg : this.lprice;
     },
   },
   mounted() {
     this.lastPriceFunction();
+    this.targetp = this.computedPrice;
   },
   methods: {
     lastPriceFunction() {
