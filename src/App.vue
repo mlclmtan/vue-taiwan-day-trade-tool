@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center">
-    <h1 class="my-10">當沖好幫手</h1>
-    <div class="flex justify-center">
+    <div id="title" class="my-10 text-4xl md:text-6xl">當沖好幫手</div>
+    <div class="flex flex-col md:flex-row justify-center">
 
       <div class="flex flex-col h-screen mx-4 text-center" id="priceRange">
         <table class="text-xl bg-gray-200 border-2">
@@ -16,24 +16,29 @@
         </table>
       </div>
 
-      <div class="flex flex-col items-center h-screen mx-4">
+      <div class="flex flex-col items-center mt-6 h-screen mx-4">
         <h2>
           股票代號：<input
             v-on:keyup.enter="lastPriceFunction"
             v-model="stockno"
+            class="w-1/3 md:w-32"
           />{{ cname }}
         </h2>
-        <h2>目標價：<input v-model.number="targetp" /></h2>
-        <h2>手續費折扣：<input v-model.number="feediscount" /></h2>
+        <h2>目標價：<input v-model.number="targetp" class="w-1/3 md:w-32" /></h2>
+        <h2>手續費折扣：<input v-model.number="feediscount" class="w-1/4 md:w-32" /></h2>
 
-        <table class="text-xl">
+        <table class="mt-4 text-3xl">
           <tr>
-            <th>買價</th>
-            <th>張數</th>
+            <th class="w-1/2">買價</th>
+            <th class="w-1/2">張數</th>
           </tr>
           <tr v-for="buy in buys" :key="buy.id">
-            <td><input v-model.number="buy.b" /></td>
-            <td><input v-model.number="buy.v" /></td>
+            <td>
+              <input v-model.number="buy.b" class="block mx-auto md:mx-0" />
+            </td>
+            <td>
+              <input v-model.number="buy.v" class="block mx-auto md:mx-0"/>
+            </td>
           </tr>
         </table>
       </div>
@@ -226,7 +231,7 @@ body {
 }
 th,
 td {
-  width: 10vw;
+  // width: 10vw;
 }
 #priceRange th {
   @apply py-1;
@@ -238,11 +243,13 @@ td {
 
 input {
   background-color: lightgreen;
-  width: 10vw;
+  width: 25vw;
+}
+@media (min-width: 768px) {
+  input {width: 10vw;}
 }
 
-h1 {
-  font-size: 72px;
+div#title {
   background: -webkit-linear-gradient(#eee, #333);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
