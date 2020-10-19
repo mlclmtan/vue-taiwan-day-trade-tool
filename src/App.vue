@@ -24,10 +24,11 @@
           股票代號：<input
             v-on:keyup.enter="lastPriceFunction"
             v-model="stockno"
+            type="number"
           />{{ cname }}
         </h2>
-        <h2>目標價：<input v-model.number="targetp" /></h2>
-        <h2>手續費折扣：<input v-model.number="feeDiscount" /></h2>
+        <h2>目標價：<input v-model.number="targetp" type="number"/></h2>
+        <h2>手續費折扣：<input v-model.number="feeDiscount" type="number"/></h2>
 
         <table class="text-xl">
           <tr>
@@ -35,8 +36,8 @@
             <th>張數</th>
           </tr>
           <tr v-for="buy in buys" :key="buy.id">
-            <td><input v-model.number="buy.b" /></td>
-            <td><input v-model.number="buy.v" /></td>
+            <td><input v-model.number="buy.b" type="number"/></td>
+            <td><input v-model.number="buy.v" type="number"/></td>
           </tr>
         </table>
       </div>
