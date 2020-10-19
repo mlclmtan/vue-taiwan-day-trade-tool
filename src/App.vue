@@ -92,7 +92,7 @@ export default {
       this.buys.forEach((buy) => {
         tot += buy.b * buy.v;
       });
-      return tot;
+      return Math.round(tot);
     },
     totalV() {
       let tot = 0;
@@ -102,7 +102,7 @@ export default {
       return tot;
     },
     totalReceive() {
-      return Math.floor(this.targetp * this.totalV);
+      return Math.round(this.targetp * this.totalV);
     },
     totalBuyFee() {
       let tot = 0;
