@@ -172,7 +172,7 @@ export default {
     },
     pRange() {
       const array = [];
-      let price = parseFloat(this.targetp) + 10 * this.tick;
+      let price = parseFloat(this.targetp) + 8 * this.tick;
       for (let index = 0; index < 17; index += 1) {
         array.push({
           price: `${price.toFixed(2)}`,
