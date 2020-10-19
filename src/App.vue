@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center">
-    <div id="title" class="my-4 text-5xl md:my-10 md:text-6xl">當沖好幫手</div>
+    <div id="title" class="my-4 text-5xl md:mb-6 md:mt-2 md:text-6xl">當沖好幫手</div>
     <div class="flex flex-col md:flex-row justify-center">
 
       <div class="flex flex-col h-screen mx-4 text-center" id="priceRange">
@@ -173,7 +173,7 @@ export default {
     pRange() {
       const array = [];
       let price = parseFloat(this.targetp) + 10 * this.tick;
-      for (let index = 0; index < 19; index += 1) {
+      for (let index = 0; index < 17; index += 1) {
         array.push({
           price: `${price.toFixed(2)}`,
           nett: `${
