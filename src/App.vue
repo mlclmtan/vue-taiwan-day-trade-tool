@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col items-center">
-    <h1 class="my-10">當沖好幫手</h1>
-    <div class="flex justify-center">
+    <div id="title" class="my-4 text-5xl md:my-10 md:text-6xl">當沖好幫手</div>
+    <div class="flex flex-col md:flex-row justify-center">
+
       <div class="flex flex-col h-screen mx-4 text-center" id="priceRange">
         <table class="text-xl bg-gray-200 border-2">
           <tr>
@@ -19,49 +20,56 @@
         </table>
       </div>
 
-      <div class="flex flex-col items-center h-screen mx-4">
+      <div class="flex flex-col items-center mt-20 h-screen mx-4 md:mt-6">
         <h2>
           股票代號：<input
             v-on:keyup.enter="lastPriceFunction"
             v-model="stockno"
             inputmode="decimal"
+            class="w-1/3 md:w-32"
           />{{ cname }}
         </h2>
-        <h2>目標價：<input v-model.number="targetp" inputmode="decimal"/></h2>
-        <h2>手續費折扣：<input v-model.number="feeDiscount" inputmode="decimal"/></h2>
+        <h2>目標價：<input v-model.number="targetp" inputmode="decimal" class="w-1/3 md:w-32" /></h2>
+        <h2>手續費折扣：
+          <input v-model.number="feeDiscount" inputmode="decimal" class="w-1/4 md:w-32" />
+        </h2>
 
-        <table class="text-xl">
+        <table class="mt-4 text-3xl">
           <tr>
-            <th>買價</th>
-            <th>張數</th>
+            <th class="w-1/2">買價</th>
+            <th class="w-1/2">張數</th>
           </tr>
           <tr v-for="buy in buys" :key="buy.id">
-            <td><input v-model.number="buy.b" inputmode="decimal"/></td>
-            <td><input v-model.number="buy.v" inputmode="decimal"/></td>
+            <td>
+              <input v-model.number="buy.b" inputmode="decimal" class="block mx-auto md:mx-0" />
+            </td>
+            <td>
+              <input v-model.number="buy.v" inputmode="decimal" class="block mx-auto md:mx-0"/>
+            </td>
           </tr>
         </table>
       </div>
 
-      <div class="flex flex-col h-screen mx-4">
-        <h2>買入: {{ totalPaid }}</h2>
-        <h2>現在賣: {{ totalReceive }}</h2>
-        <br />
+        <div class="flex flex-col h-screen mx-4 -mt-24 md:mt-0">
+          <h2>買入: {{ totalPaid }}</h2>
+          <h2>現在賣: {{ totalReceive }}</h2>
+          <br />
         <h2>買手續費： {{ totalPaid === 0 ? '' : totalBuyFee }}</h2>
         <h2>
           賣手續費： {{ totalPaid === 0 ? '' : totalSellFee }}
         </h2>
         <h2>稅0.003/2： {{ totalPaid === 0 ? '' : tax }}</h2>
-        <br />
-        <h2>原收入： {{ totalPaid === 0 ? '' : income }}</h2>
-        <h2>稅+手續費： {{ totalPaid === 0 ? '' : Math.round(allfees) }}</h2>
-        <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
-        <br />
-        <h2>最後收盤: {{ lprice }}</h2>
-        <h2>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h2>
-        <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
+          <br />
+          <h2>原收入： {{ totalPaid === 0 ? '' : income }}</h2>
+          <h2>稅+手續費： {{ totalPaid === 0 ? '' : Math.round(allfees) }}</h2>
+          <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
+          <br />
+          <h2>最後收盤: {{ lprice }}</h2>
+          <h2>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h2>
+          <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -71,13 +79,15 @@ export default {
     return {
       stockno: '',
       buys: [
-        // { b: null, v: null },
-        // { b: null, v: null },
-        // { b: null, v: null },
-        // { b: null, v: null },
-        { b: 39.5, v: 1 },
-        { b: 39.55, v: 1 },
-        { b: 39.4, v: 1 },
+        { b: null, v: null },
+        { b: null, v: null },
+        { b: null, v: null },
+        { b: null, v: null },
+        { b: null, v: null },
+        { b: null, v: null },
+        // { b: 39.5, v: 1 },
+        // { b: 39.55, v: 1 },
+        // { b: 39.4, v: 1 },
         // { b: 12, v: 1000 },
         // { b: 8.5, v: 1000 },
       ],
@@ -247,24 +257,25 @@ body {
 }
 th,
 td {
-  width: 10vw;
+  // width: 10vw;
 }
 #priceRange th {
   @apply py-1;
 }
-#priceRange td,
-th {
+#priceRange td,th {
   width: 10vw;
   @apply px-3 border;
 }
 
 input {
   background-color: lightgreen;
-  width: 10vw;
+  width: 25vw;
+}
+@media (min-width: 768px) {
+  input {width: 10vw;}
 }
 
-h1 {
-  font-size: 72px;
+div#title {
   background: -webkit-linear-gradient(#eee, #333);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
