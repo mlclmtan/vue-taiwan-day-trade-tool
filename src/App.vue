@@ -22,16 +22,18 @@
       </div>
 
       <div class="flex flex-col items-center mt-20 h-screen mx-4 md:mt-6">
-        <h2>
+        <h2 class="self-start">
           股票代號：<input
             v-on:keyup.enter="lastPriceFunction"
             v-model="stockno"
             inputmode="decimal"
-            class="w-1/3 md:w-32"
+            class="w-1/3 right-0 md:w-32"
           />{{ cname }}
         </h2>
-        <h2>目標價：<input v-model.number="targetp" inputmode="decimal" class="w-1/3 md:w-32" /></h2>
-        <h2>手續費折扣：
+        <h2 class="self-start">
+          目標價：<input v-model.number="targetp" inputmode="decimal" class="w-1/3 md:w-32" />
+        </h2>
+        <h2 class="self-start">手續費折扣：
           <input v-model.number="feeDiscount" inputmode="decimal" class="w-1/4 md:w-32" />
         </h2>
 
