@@ -141,7 +141,7 @@ export default {
       return Math.floor(tot);
     },
     income() {
-      return (this.totalPaid - this.total) * -1;
+      return (this.totalPaid - this.totalReceive) * -1;
     },
     allfees() {
       return this.totalBuyFee + this.totalSellFee + this.tax;
@@ -186,14 +186,13 @@ export default {
       return 0;
       //  ? null : newAvg.toFixed(2);
     },
-    computedPrice() {
-      return typeof this.lprice === 'undefined' ? this.avg : this.lprice;
-    },
+    // computedPrice() {
+    //   return typeof this.lprice === 'undefined' ? this.avg : this.lprice;
+    // },
   },
-  mounted() {
-    this.lastPriceFunction();
-    this.targetp = this.computedPrice;
-  },
+  // mounted() {
+  //   this.targetp = this.computedPrice;
+  // },
   methods: {
     lastPriceFunction() {
       const proxyurl = 'https://cors-anywhere.herokuapp.com/';
