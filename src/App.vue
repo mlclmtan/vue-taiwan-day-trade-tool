@@ -79,15 +79,15 @@ export default {
     return {
       stockno: '',
       buys: [
-        { b: null, v: null },
-        { b: null, v: null },
-        { b: null, v: null },
-        { b: null, v: null },
-        { b: null, v: null },
-        { b: null, v: null },
-        // { b: 39.5, v: 1 },
-        // { b: 39.55, v: 1 },
-        // { b: 39.4, v: 1 },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        { b: 39.5, v: 1 },
+        { b: 39.55, v: 1 },
+        { b: 39.4, v: 1 },
         // { b: 12, v: 1000 },
         // { b: 8.5, v: 1000 },
       ],
@@ -188,9 +188,10 @@ export default {
       }
       return array;
     },
-    avg() {
+    avg() { // 成本價買賣家與買價相同，稅依照買價計算
       if (this.totalPaid !== 0) {
-        const avg = (this.totalPaid + this.totalBuyFee) / this.totalV;
+        const tempTax = (this.totalPaid * 0.003) / 2;
+        const avg = (this.totalPaid + this.totalBuyFee * 2 + tempTax) / this.totalV;
         const newAvg = avg % this.tick === 0 ? avg : avg + this.tick - (avg % this.tick);
         return newAvg;
       }
