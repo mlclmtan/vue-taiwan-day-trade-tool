@@ -51,21 +51,21 @@
       </div>
 
         <div class="flex flex-col h-screen mx-4 -mt-24 md:mt-0">
-          <h2>買入: {{ totalPaid }}</h2>
-          <h2>現在賣: {{ totalReceive }}</h2>
+          <h3>買入: {{ totalPaid }}</h3>
+          <h3>現在賣: {{ totalReceive }}</h3>
           <br />
-        <h2>買手續費： {{ totalPaid === 0 ? '' : totalBuyFee }}</h2>
-        <h2>
+        <h3>買手續費： {{ totalPaid === 0 ? '' : totalBuyFee }}</h3>
+        <h3>
           賣手續費： {{ totalPaid === 0 ? '' : totalSellFee }}
-        </h2>
-        <h2>稅0.003/2： {{ totalPaid === 0 ? '' : tax }}</h2>
+        </h3>
+        <h3>稅0.003/2： {{ totalPaid === 0 ? '' : tax }}</h3>
           <br />
           <h2>原收入： {{ totalPaid === 0 ? '' : income }}</h2>
           <h2>稅+手續費： {{ totalPaid === 0 ? '' : Math.round(allfees) }}</h2>
           <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
           <br />
-          <h2>最後收盤: {{ lprice }}</h2>
-          <h2>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h2>
+          <h3>最後收盤: {{ lprice }}</h3>
+          <h3>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h3>
           <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
         </div>
       </div>
@@ -283,5 +283,8 @@ div#title {
 
 h2 {
   font-size: 36px;
+}
+h3 {
+  font-size: 24px;
 }
 </style>
