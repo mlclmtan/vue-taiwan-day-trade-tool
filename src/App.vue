@@ -12,7 +12,8 @@
           <tr
             v-for="p in pRange"
             :key="p.id"
-            :class="p.price == avg ? 'bg-red-200' : 'bg-blue-100'"
+            :class="p.price == avg ? 'bg-yellow-200'
+            : p.price == targetp ? 'bg-red-200' : 'bg-blue-100'"
           >
             <td>{{ totalPaid === 0 ? '-' : p.price }}</td>
             <td>{{ totalPaid === 0 ? '-' : Math.round(p.nett) }}</td>
@@ -74,7 +75,7 @@
 
 <script>
 export default {
-  name: 'main',
+  name: 'homepage',
   data() {
     return {
       stockno: '',
