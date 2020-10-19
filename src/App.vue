@@ -3,7 +3,7 @@
     <div id="title" class="my-4 text-5xl md:mb-6 md:mt-2 md:text-6xl">當沖好幫手</div>
     <div class="flex flex-col md:flex-row justify-center">
 
-      <div class="flex flex-col h-screen mx-4 text-center" id="priceRange">
+      <div class="flex flex-col mx-4 text-center" id="priceRange">
         <table class="text-xl bg-gray-200 border-2">
           <tr>
             <th>成交價</th>
@@ -21,7 +21,7 @@
         </table>
       </div>
 
-      <div class="flex flex-col items-center mt-20 h-screen mx-4 md:mt-6">
+      <div class="flex flex-col items-center mt-6 mx-46">
         <h2 class="self-start">
           股票代號：<input
             v-on:keyup.enter="lastPriceFunction"
@@ -53,7 +53,7 @@
         </table>
       </div>
 
-        <div class="flex flex-col h-screen mx-4 -mt-24 md:mt-0">
+        <div class="flex flex-col h-screen mx-4 mt-6">
           <h3>買入: {{ totalPaid }}</h3>
           <h3>現在賣: {{ totalReceive }}</h3>
           <br />
