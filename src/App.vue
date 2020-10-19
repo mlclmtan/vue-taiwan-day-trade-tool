@@ -74,9 +74,9 @@ export default {
         // { b: null, v: null },
         // { b: null, v: null },
         // { b: null, v: null },
-        { b: 39.5, v: 1000 },
-        { b: 39.55, v: 1000 },
-        { b: 39.4, v: 1000 },
+        { b: 39.5, v: 1 },
+        { b: 39.55, v: 1 },
+        { b: 39.4, v: 1 },
         // { b: 12, v: 1000 },
         // { b: 8.5, v: 1000 },
       ],
@@ -90,14 +90,14 @@ export default {
     totalPaid() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        tot += buy.b * buy.v;
+        tot += buy.b * buy.v * 1000;
       });
       return Math.round(tot);
     },
     totalV() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        tot += buy.v;
+        tot += buy.v * 1000;
       });
       return tot;
     },
@@ -108,9 +108,9 @@ export default {
       let tot = 0;
       this.buys.forEach((buy) => {
         if (buy.v !== null || buy.b !== null) {
-          const fee = buy.b * buy.v * 0.001425 * this.feeDiscount <= 20
+          const fee = buy.b * buy.v * 1000 * 0.001425 * this.feeDiscount <= 20
             ? 20
-            : buy.b * buy.v * 0.001425 * this.feeDiscount;
+            : buy.b * buy.v * 1000 * 0.001425 * this.feeDiscount;
           tot += fee;
         }
       });
@@ -135,7 +135,7 @@ export default {
     tax() {
       let tot = 0;
       this.buys.forEach((buy) => {
-        const fee = (this.targetp * buy.v * 0.003) / 2;
+        const fee = (this.targetp * buy.v * 1000 * 0.003) / 2;
         tot += fee;
       });
       return Math.floor(tot);
