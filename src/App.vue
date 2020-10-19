@@ -2,16 +2,19 @@
   <div class="flex flex-col items-center">
     <h1 class="my-10">當沖好幫手</h1>
     <div class="flex justify-center">
-
       <div class="flex flex-col h-screen mx-4 text-center" id="priceRange">
         <table class="text-xl bg-gray-200 border-2">
           <tr>
             <th>成交價</th>
             <th>損益</th>
           </tr>
-          <tr v-for="p in pRange" :key="p.id" :class="p.price==avg ? 'bg-red-200' : 'bg-blue-100'">
-            <td>{{totalpaid === 0 ? '-' : p.price}}</td>
-            <td>{{totalpaid === 0 ? '-' : Math.round(p.nett)}}</td>
+          <tr
+            v-for="p in pRange"
+            :key="p.id"
+            :class="p.price == avg ? 'bg-red-200' : 'bg-blue-100'"
+          >
+            <td>{{ totalPaid === 0 ? '-' : p.price }}</td>
+            <td>{{ totalPaid === 0 ? '-' : Math.round(p.nett) }}</td>
           </tr>
         </table>
       </div>
@@ -24,7 +27,7 @@
           />{{ cname }}
         </h2>
         <h2>目標價：<input v-model.number="targetp" /></h2>
-        <h2>手續費折扣：<input v-model.number="feediscount" /></h2>
+        <h2>手續費折扣：<input v-model.number="feeDiscount" /></h2>
 
         <table class="text-xl">
           <tr>
@@ -38,24 +41,26 @@
         </table>
       </div>
 
-        <div class="flex flex-col h-screen mx-4">
-          <h2>買入: {{ totalpaid }}</h2>
-          <h2>現在賣: {{ targetp * totalV }}</h2>
-          <br />
-          <h2>買手續費： {{ totalpaid === 0 ? '' : Math.round(totalBuyFee) }}</h2>
-          <h2>賣手續費： {{ totalpaid === 0 ? '' : Math.round(totalSellFee) }}</h2>
-          <h2>稅0.003/2： {{ totalpaid === 0 ? '' : Math.round(tax) }}</h2>
-          <br />
-          <h2>原收入： {{ totalpaid === 0 ? '' : income }}</h2>
-          <h2>稅+手續費： {{ totalpaid === 0 ? '' : Math.round(allfees) }}</h2>
-          <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
-          <br />
-          <h2>最後收盤: {{ lprice }}</h2>
-          <h2>每升一格多少元: {{ totalpaid === 0 ? '' : tick }}</h2>
-          <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
-        </div>
+      <div class="flex flex-col h-screen mx-4">
+        <h2>買入: {{ totalPaid }}</h2>
+        <h2>現在賣: {{ totalReceive }}</h2>
+        <br />
+        <h2>買手續費： {{ totalPaid === 0 ? '' : totalBuyFee }}</h2>
+        <h2>
+          賣手續費： {{ totalPaid === 0 ? '' : totalSellFee }}
+        </h2>
+        <h2>稅0.003/2： {{ totalPaid === 0 ? '' : tax }}</h2>
+        <br />
+        <h2>原收入： {{ totalPaid === 0 ? '' : income }}</h2>
+        <h2>稅+手續費： {{ totalPaid === 0 ? '' : Math.round(allfees) }}</h2>
+        <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
+        <br />
+        <h2>最後收盤: {{ lprice }}</h2>
+        <h2>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h2>
+        <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -65,24 +70,24 @@ export default {
     return {
       stockno: '',
       buys: [
-        { b: null, v: null },
-        { b: null, v: null },
-        { b: null, v: null },
-        { b: null, v: null },
-        // { b: 10, v: 1000 },
-        // { b: 9, v: 1000 },
-        // { b: 8, v: 1000 },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        // { b: null, v: null },
+        { b: 39.5, v: 1000 },
+        { b: 39.55, v: 1000 },
+        { b: 39.4, v: 1000 },
         // { b: 12, v: 1000 },
         // { b: 8.5, v: 1000 },
       ],
       lprice: null,
-      targetp: null,
-      feediscount: 0.3,
+      targetp: 39.3,
+      feeDiscount: 0.3,
       cname: '',
     };
   },
   computed: {
-    totalpaid() {
+    totalPaid() {
       let tot = 0;
       this.buys.forEach((buy) => {
         tot += buy.b * buy.v;
@@ -96,30 +101,36 @@ export default {
       });
       return tot;
     },
+    totalReceive() {
+      return Math.floor(this.targetp * this.totalV);
+    },
     totalBuyFee() {
       let tot = 0;
       this.buys.forEach((buy) => {
         if (buy.v !== null || buy.b !== null) {
-          const fee = buy.b * buy.v * 0.001425 * this.feediscount <= 20
+          const fee = buy.b * buy.v * 0.001425 * this.feeDiscount <= 20
             ? 20
-            : buy.b * buy.v * 0.001425 * this.feediscount;
+            : buy.b * buy.v * 0.001425 * this.feeDiscount;
           tot += fee;
         }
       });
-      return tot;
+      return Math.floor(tot);
     },
     totalSellFee() {
-      let tot = 0;
-      this.buys.forEach((buy) => {
-        if (buy.v !== null || buy.b !== null) {
-          const fee = this.targetp * buy.v * 0.001425 * this.feediscount <= 20
-            ? 20
-            : this.targetp * buy.v * 0.001425 * this.feediscount;
-          tot += fee;
-        }
-      });
+      // let tot = 0;
+      // this.buys.forEach((buy) => {
+      // if (buy.v !== null || buy.b !== null) {
+      //   const fee = this.targetp * buy.v * 0.001425 * this.feeDiscount <= 20
+      //     ? 20
+      //     : this.targetp * buy.v * 0.001425 * this.feeDiscount;
+      //   tot += fee;
+      // }
+      // });
+      const tot = this.totalReceive * 0.001425 * this.feeDiscount <= 20
+        ? 20
+        : this.totalReceive * 0.001425 * this.feeDiscount;
 
-      return tot;
+      return Math.floor(tot);
     },
     tax() {
       let tot = 0;
@@ -127,10 +138,10 @@ export default {
         const fee = (this.targetp * buy.v * 0.003) / 2;
         tot += fee;
       });
-      return tot;
+      return Math.floor(tot);
     },
     income() {
-      return (this.totalpaid - this.targetp * this.totalV) * -1;
+      return (this.totalPaid - this.total) * -1;
     },
     allfees() {
       return this.totalBuyFee + this.totalSellFee + this.tax;
@@ -145,20 +156,30 @@ export default {
       if (this.targetp < 500) return 0.5;
       if (this.targetp < 1000) {
         return 1;
-      } return 5;
+      }
+      return 5;
     },
     pRange() {
       const array = [];
-      let price = parseFloat(this.targetp) + (10 * this.tick);
+      let price = parseFloat(this.targetp) + 10 * this.tick;
       for (let index = 0; index < 19; index += 1) {
-        array.push({ price: `${price.toFixed(2)}`, nett: `${price * this.totalV - this.totalpaid - this.totalBuyFee - this.calculateFee(price) - this.tax}` });
+        array.push({
+          price: `${price.toFixed(2)}`,
+          nett: `${
+            price * this.totalV
+            - this.totalPaid
+            - this.totalBuyFee
+            - this.calculateFee(price)
+            - this.tax
+          }`,
+        });
         price -= this.tick;
       }
       return array;
     },
     avg() {
-      if (this.totalpaid !== 0) {
-        const avg = (this.totalpaid + this.totalBuyFee) / this.totalV;
+      if (this.totalPaid !== 0) {
+        const avg = (this.totalPaid + this.totalBuyFee) / this.totalV;
         const newAvg = avg % this.tick === 0 ? avg : avg + this.tick - (avg % this.tick);
         return newAvg;
       }
@@ -207,9 +228,9 @@ export default {
       // );
     },
     calculateFee(sellPrice) {
-      const fee = sellPrice * this.totalV * 0.001425 * this.feediscount <= 20
+      const fee = sellPrice * this.totalV * 0.001425 * this.feeDiscount <= 20
         ? 20
-        : sellPrice * this.totalV * 0.001425 * this.feediscount;
+        : sellPrice * this.totalV * 0.001425 * this.feeDiscount;
       return fee;
     },
   },
@@ -231,7 +252,8 @@ td {
 #priceRange th {
   @apply py-1;
 }
-#priceRange td,th {
+#priceRange td,
+th {
   width: 10vw;
   @apply px-3 border;
 }
