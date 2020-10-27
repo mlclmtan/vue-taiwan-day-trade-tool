@@ -1,6 +1,8 @@
 # vue-taiwan-day-trade-tool
 
-##hello
+# DEMO 
+http://stock.mlclmtan.ga/new/
+
 
 ## Project setup
 ```
