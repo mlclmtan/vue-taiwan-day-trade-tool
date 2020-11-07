@@ -1,28 +1,19 @@
-# vue-taiwan-day-trade-tool
+# Taiwan Day Trading Tool
 
-# DEMO 
-http://stock.mlclmtan.ga/new/
+Managing your profit while trading.
 
 
-## Project setup
-```
-npm install
-```
+🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+---
+## Features I'd like to highlight:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+* **📱 Mobile Responsiveness 📱**
 
-### Lints and fixes files
-```
-npm run lint
-```
+    This site includes some extra customizations with media queries using Tailwindcss.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Thanks for stopping by! You can see this project live at http://stock.mlclmtan.ga/new/
+
+
+
