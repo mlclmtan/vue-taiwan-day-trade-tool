@@ -1,8 +1,9 @@
 <template>
   <div class="flex flex-col items-center">
-    <div id="title" class="my-4 text-5xl md:mb-6 md:mt-2 md:text-6xl">當沖好幫手</div>
+    <div id="title" class="my-4 text-5xl md:mb-6 md:mt-2 md:text-6xl">
+      當沖好幫手
+    </div>
     <div class="flex flex-col md:flex-row justify-center">
-
       <div class="flex flex-col mx-4 text-center" id="priceRange">
         <table class="text-xl bg-gray-200 border-2">
           <tr>
@@ -12,8 +13,13 @@
           <tr
             v-for="p in pRange"
             :key="p.id"
-            :class="p.price == avg ? 'bg-yellow-200'
-            : p.price == targetp ? 'bg-red-200' : 'bg-blue-100'"
+            :class="
+              p.price == avg
+                ? 'bg-yellow-200'
+                : p.price == targetp
+                ? 'bg-red-200'
+                : 'bg-blue-100'
+            "
           >
             <td>{{ totalPaid === 0 ? '-' : p.price }}</td>
             <td>{{ totalPaid === 0 ? '-' : Math.round(p.nett) }}</td>
@@ -21,7 +27,7 @@
         </table>
       </div>
 
-      <div class="flex flex-col items-center mt-6 mx-46">
+      <div class="flex flex-col items-center mx-46">
         <h2 class="self-start">
           股票代號：<input
             v-on:keyup.enter="lastPriceFunction"
@@ -31,10 +37,19 @@
           />{{ cname }}
         </h2>
         <h2 class="self-start">
-          目標價：<input v-model.number="targetp" inputmode="decimal" class="w-1/3 md:w-32" />
+          目標價：<input
+            v-model.number="targetp"
+            inputmode="decimal"
+            class="w-1/3 md:w-32"
+          />
         </h2>
-        <h2 class="self-start">手續費折扣：
-          <input v-model.number="feeDiscount" inputmode="decimal" class="w-1/4 md:w-32" />
+        <h2 class="self-start">
+          手續費折扣：
+          <input
+            v-model.number="feeDiscount"
+            inputmode="decimal"
+            class="w-1/4 md:w-32"
+          />
         </h2>
 
         <table class="mt-4 text-3xl">
@@ -44,35 +59,61 @@
           </tr>
           <tr v-for="buy in buys" :key="buy.id">
             <td>
-              <input v-model.number="buy.b" inputmode="decimal" class="block mx-auto md:mx-0" />
+              <input
+                v-model.number="buy.b"
+                inputmode="decimal"
+                class="block mx-auto md:mx-0"
+              />
             </td>
             <td>
-              <input v-model.number="buy.v" inputmode="decimal" class="block mx-auto md:mx-0"/>
+              <input
+                v-model.number="buy.v"
+                inputmode="decimal"
+                class="block mx-auto md:mx-0"
+              />
             </td>
           </tr>
         </table>
+
+        <span class="self-start">停利：{{ takeProfit.toFixed(2) }}</span>
+        <span class="self-start">停損：{{ stopLoss.toFixed(2) }}</span>
+        <span class="self-start"
+          >每次想賺多少：
+          <input
+            v-model.number="idealProfit"
+            inputmode="decimal"
+            class="w-1/4 md:w-32"
+          />
+        </span>
+        <span class="self-start"
+          >建議總額：{{ Math.round(idealAmount) }} k</span
+        >
+        <span class="self-start"
+          >建議張數：{{ Math.round(idealVolume) }} 張</span
+        >
       </div>
 
-        <div class="flex flex-col h-screen mx-4 mt-6">
-          <h3>買入: {{ totalPaid }}</h3>
-          <h3>現在賣: {{ totalReceive }}</h3>
-          <br />
+      <div class="flex flex-col h-screen md:h-auto mx-4 mt-6">
+        <h3>買入: {{ seperator(totalPaid) }}</h3>
+        <h3>現在賣: {{ seperator(totalReceive) }}</h3>
+        <br />
         <h3>買手續費： {{ totalPaid === 0 ? '' : totalBuyFee }}</h3>
-        <h3>
-          賣手續費： {{ totalPaid === 0 ? '' : totalSellFee }}
-        </h3>
+        <h3>賣手續費： {{ totalPaid === 0 ? '' : totalSellFee }}</h3>
         <h3>稅0.003/2： {{ totalPaid === 0 ? '' : tax }}</h3>
-          <br />
-          <h2>原收入： {{ totalPaid === 0 ? '' : income }}</h2>
-          <h2>稅+手續費： {{ totalPaid === 0 ? '' : Math.round(allfees) }}</h2>
-          <h2 class="bg-red-600">總收入： {{ Math.round(nett) }}</h2>
-          <br />
-          <h3>最後收盤: {{ lprice }}</h3>
-          <h3>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h3>
-          <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
-        </div>
+        <br />
+        <h2>原收入： {{ totalPaid === 0 ? '' : seperator(income) }}</h2>
+        <h2>
+          稅+手續費：
+          {{ totalPaid === 0 ? '' : seperator(Math.round(allfees)) }}
+        </h2>
+        <h2 class="bg-red-600">總收入： {{ seperator(Math.round(nett)) }}</h2>
+        <br />
+        <h3>最後收盤: {{ lprice }}</h3>
+        <h3>每升一格多少元: {{ totalPaid === 0 ? '' : tick }}</h3>
+        <h2>成本價: {{ avg === 0 ? '' : avg.toFixed(2) }}</h2>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -88,7 +129,7 @@ export default {
         { b: null, v: null },
         { b: null, v: null },
         { b: null, v: null },
-        // { b: 39.5, v: 1 },
+        // { b: 12.8, v: 120 },
         // { b: 39.55, v: 1 },
         // { b: 39.4, v: 1 },
         // { b: 12, v: 1000 },
@@ -98,6 +139,7 @@ export default {
       targetp: null,
       feeDiscount: 0.3,
       cname: '',
+      idealProfit: 11875,
     };
   },
   computed: {
@@ -191,7 +233,8 @@ export default {
       }
       return array;
     },
-    avg() { // 成本價買賣家與買價相同，稅依照買價計算
+    avg() {
+      // 成本價買賣家與買價相同，稅依照買價計算
       if (this.totalPaid !== 0) {
         const tempTax = (this.totalPaid * 0.003) / 2;
         const avg = (this.totalPaid + this.totalBuyFee * 2 + tempTax) / this.totalV;
@@ -200,6 +243,42 @@ export default {
       }
       return 0;
       //  ? null : newAvg.toFixed(2);
+    },
+    takeProfit() {
+      const gainTwoPercent = 1.02;
+      const totalFee = 0.001425 * this.feeDiscount
+        + gainTwoPercent * 0.001425 * this.feeDiscount
+        + gainTwoPercent * 0.0015;
+      const doubleFee = totalFee * 2;
+      const totalProfit = 0.02 + doubleFee;
+      const profitPercent = totalProfit;
+      const takeProfitPrice = (1 + profitPercent) * this.buys[0].b;
+      return takeProfitPrice;
+    },
+    stopLoss() {
+      const lossOnePercent = 0.99;
+      const totalFee = 0.001425 * this.feeDiscount
+        + lossOnePercent * 0.001425 * this.feeDiscount
+        + lossOnePercent * 0.0015;
+      const totalLoss = 0.01 - totalFee;
+      const lossPercent = totalLoss;
+      console.log(totalFee, totalLoss * 1000, lossPercent);
+      const stopLossPrice = (1 - lossPercent) * this.buys[0].b;
+      return stopLossPrice;
+    },
+    idealVolume() {
+      const everyTimeTargetProfit = this.idealProfit * (3 / 2); // 66% win rate
+      const totalFee = this.buys[0].b * 0.001425 * this.feeDiscount
+        + this.takeProfit * 0.001425 * this.feeDiscount
+        + this.takeProfit * 0.0015;
+      return (
+        everyTimeTargetProfit
+        / (this.takeProfit - this.buys[0].b - totalFee)
+        / 1000
+      );
+    },
+    idealAmount() {
+      return this.idealVolume * this.takeProfit;
     },
     // computedPrice() {
     //   return typeof this.lprice === 'undefined' ? this.avg : this.lprice;
@@ -247,6 +326,31 @@ export default {
         : sellPrice * this.totalV * 0.001425 * this.feeDiscount;
       return fee;
     },
+    calculateTax(sellPrice) {
+      const fee = sellPrice * this.totalV * 0.0015;
+      return fee;
+    },
+    pad(n, width, z) { // leading zero
+      const a = z || '0';
+      const b = `${n}`;
+      return b.length >= width
+        ? b
+        : new Array(width - b.length + 1).join(a) + b;
+    },
+    seperator(value) {
+      const hundreds = value % 1000;
+      const hundredThousands = value % 1000000;
+      if (value / 1000 < 1) {
+        return value;
+      }
+      if (value / 1000 < 1000) {
+        return `${Math.trunc(value / 1000)},${
+          this.pad(hundreds, 3)
+        }`;
+      }
+      const mid = hundredThousands - hundreds;
+      return `${Math.trunc(value / 1000000)},${this.pad(mid / 1000, 3)},${this.pad(hundreds, 3)}`;
+    },
   },
 };
 </script>
@@ -266,7 +370,8 @@ td {
 #priceRange th {
   @apply py-1;
 }
-#priceRange td,th {
+#priceRange td,
+th {
   width: 10vw;
   @apply px-3 border;
 }
@@ -276,7 +381,9 @@ input {
   width: 25vw;
 }
 @media (min-width: 768px) {
-  input {width: 10vw;}
+  input {
+    width: 10vw;
+  }
 }
 
 div#title {
