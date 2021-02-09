@@ -75,8 +75,8 @@
           </tr>
         </table>
 
-        <span class="self-start">停利：{{ takeProfit.toFixed(2) }}</span>
-        <span class="self-start">停損：{{ stopLoss.toFixed(2) }}</span>
+        <span class="self-start">停利：{{ takeProfit == 0.00 ? '' : takeProfit.toFixed(2) }}</span>
+        <span class="self-start">停損：{{ stopLoss == 0.00 ? '' : stopLoss.toFixed(2) }}</span>
         <span class="self-start"
           >每次想賺多少：
           <input
@@ -86,10 +86,10 @@
           />
         </span>
         <span class="self-start"
-          >建議總額：{{ Math.round(idealAmount) }} k</span
+          >建議總額：{{ idealAmount ? Math.round(idealAmount) + ' k' : '' }} </span
         >
         <span class="self-start"
-          >建議張數：{{ Math.round(idealVolume) }} 張</span
+          >建議張數：{{ idealVolume == 'Infinity' ? '' : Math.round(idealVolume) + ' 張'}}</span
         >
       </div>
 
@@ -137,9 +137,9 @@ export default {
       ],
       lprice: null,
       targetp: null,
-      feeDiscount: 0.3,
+      feeDiscount: 0.25,
       cname: '',
-      idealProfit: 11875,
+      idealProfit: 5282, // 2% profit for 300,000 quota
     };
   },
   computed: {
@@ -246,39 +246,38 @@ export default {
     },
     takeProfit() {
       const gainTwoPercent = 1.02;
-      const totalFee = 0.001425 * this.feeDiscount
-        + gainTwoPercent * 0.001425 * this.feeDiscount
-        + gainTwoPercent * 0.0015;
-      const doubleFee = totalFee * 2;
-      const totalProfit = 0.02 + doubleFee;
-      const profitPercent = totalProfit;
-      const takeProfitPrice = (1 + profitPercent) * this.buys[0].b;
-      return takeProfitPrice;
+      // const totalFee = 0.001425 * this.feeDiscount
+      //   + gainTwoPercent * 0.001425 * this.feeDiscount
+      //   + gainTwoPercent * 0.0015;
+      // const doubleFee = totalFee; // * 2;
+      // const totalProfit = 0.02 + doubleFee;
+      // const profitPercent = totalProfit;
+      // const takeProfitPrice = (1 + profitPercent) * this.buys[0].b;
+      return gainTwoPercent * this.buys[0].b;
     },
     stopLoss() {
       const lossOnePercent = 0.99;
-      const totalFee = 0.001425 * this.feeDiscount
-        + lossOnePercent * 0.001425 * this.feeDiscount
-        + lossOnePercent * 0.0015;
-      const totalLoss = 0.01 - totalFee;
-      const lossPercent = totalLoss;
-      console.log(totalFee, totalLoss * 1000, lossPercent);
-      const stopLossPrice = (1 - lossPercent) * this.buys[0].b;
-      return stopLossPrice;
+      // const totalFee = 0.001425 * this.feeDiscount
+      //   + lossOnePercent * 0.001425 * this.feeDiscount
+      //   + lossOnePercent * 0.0015;
+      // const totalLoss = 0.01 - totalFee;
+      // const lossPercent = totalLoss;
+      // // console.log(totalFee, totalLoss * 1000, lossPercent);
+      // const stopLossPrice = (1 - lossPercent) * this.buys[0].b;
+      return lossOnePercent * this.buys[0].b;
     },
     idealVolume() {
-      const everyTimeTargetProfit = this.idealProfit * (3 / 2); // 66% win rate
       const totalFee = this.buys[0].b * 0.001425 * this.feeDiscount
         + this.takeProfit * 0.001425 * this.feeDiscount
         + this.takeProfit * 0.0015;
       return (
-        everyTimeTargetProfit
-        / (this.takeProfit - this.buys[0].b - totalFee)
+        this.idealProfit
+        / (this.takeProfit - totalFee - this.buys[0].b)
         / 1000
       );
     },
     idealAmount() {
-      return this.idealVolume * this.takeProfit;
+      return Math.round(this.idealVolume) * this.buys[0].b;
     },
     // computedPrice() {
     //   return typeof this.lprice === 'undefined' ? this.avg : this.lprice;
