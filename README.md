@@ -8,7 +8,7 @@ Managing your profit while trading.
 ---
 ## Features I'd like to highlight:
 
-* **✔ Demo deployed on Netlify **
+* **✔ Demo deployed on Netlify**
 
 * **📱 Mobile Responsiveness 📱**
 
