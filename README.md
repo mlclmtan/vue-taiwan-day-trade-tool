@@ -1,6 +1,6 @@
 # Taiwan Day Trading Tool
 
-Managing your profit while trading.
+Managing your profit while trading. This utility instantly calculates the profit or loss during day trading in Taiwan stock market. It outputs the exact receivable/payable amount to enhance precise trading.
 
 
 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
