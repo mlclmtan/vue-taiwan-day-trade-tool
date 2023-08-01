@@ -15,7 +15,6 @@ Managing your profit while trading. This utility instantly calculates the profit
     This site includes some extra customizations with media queries using Tailwindcss.
 
 
-### Thanks for stopping by! You can see this project live at https://daytrade.malcolmtan.tech/
-
+### Thanks for stopping by! You can see this project live at [https://daytrade.malcolmtan.click/](https://daytrade.malcolmtan.click/)
 
 
